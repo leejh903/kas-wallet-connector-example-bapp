@@ -12,8 +12,7 @@ import 'package:kas_wallet_connector_example_bapp/service/kas_service.dart';
 import 'package:crypto/crypto.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -31,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = emailController.text;
     final password =
         '0x${sha256.convert(utf8.encode(passwordController.text))}';
-    dynamic res = _kasService.login(email, password);
+    dynamic res = await _kasService.login(email, password);
 
     if (res is KasError) {
       ScaffoldMessenger.of(context).showSnackBar(

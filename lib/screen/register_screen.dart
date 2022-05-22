@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:kas_wallet_connector_example_bapp/model/error.dart';
 import 'package:kas_wallet_connector_example_bapp/screen/login_screen.dart';
+import 'package:kas_wallet_connector_example_bapp/service/kas_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key, required this.title}) : super(key: key);
@@ -15,6 +20,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final _kasService = KasService();
+
+  Future<void> signIn() async {
+    _formKey.currentState!.validate();
+
+    final email = emailController.text;
+    final password =
+        '0x${sha256.convert(utf8.encode(passwordController.text))}';
+    final name = nameController.text;
+    dynamic res = await _kasService.register(email, password, name);
+
+    if (res is KasError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${res.message}'),
+        ),
+      );
+      return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           height: 40,
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {}
-                          },
+                          onPressed: signIn,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                           ),
@@ -130,8 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        const LoginScreen(title: 'Login UI'),
+                                    builder: (context) => const LoginScreen(),
                                   ),
                                 );
                               },

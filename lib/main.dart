@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kas_wallet_connector_example_bapp/screen/login_screen.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: defaultColorScheme,
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(title: 'Login UI'),
+      home: const LoginScreen(),
     );
   }
 }
