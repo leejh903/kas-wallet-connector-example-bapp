@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kas_wallet_connector_example_bapp/constant/storage.dart';
 import 'package:kas_wallet_connector_example_bapp/model/error.dart';
 import 'package:kas_wallet_connector_example_bapp/model/jwt.dart';
+import 'package:kas_wallet_connector_example_bapp/screen/forgot_pw_screen.dart';
 import 'package:kas_wallet_connector_example_bapp/screen/home_screen.dart';
 import 'package:kas_wallet_connector_example_bapp/screen/register_screen.dart';
 import 'package:kas_wallet_connector_example_bapp/service/kas_service.dart';
@@ -116,11 +117,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                const RegisterScreen(title: 'Register UI'),
+                            builder: (context) => const ForgotPasswordScreen(),
                           ),
                         );
                       },

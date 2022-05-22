@@ -90,4 +90,43 @@ class KasService {
     }
     return decode;
   }
+
+  Future<dynamic> sendVerificationCode(String userName) async {
+    Map data = {
+      'clientId': clientId,
+    };
+    final body = json.encode(data);
+
+    final response = await http.post(
+      Uri.https(endpoint, '/v1/account/$userName/verification'),
+      body: body,
+    );
+
+    final decode = jsonDecode(response.body) as Map<String, dynamic>;
+    if (response.statusCode != 200) {
+      return KasError.fromJson(decode);
+    }
+    return decode;
+  }
+
+  Future<dynamic> confirmVerificationCode(
+      String userName, String newPassword, String confirmCode) async {
+    Map data = {
+      'confirmCode': confirmCode,
+      'newPassword': newPassword,
+      'clientId': clientId,
+    };
+    final body = json.encode(data);
+
+    final response = await http.post(
+      Uri.https(endpoint, '/v1/account/$userName/confirm'),
+      body: body,
+    );
+
+    final decode = jsonDecode(response.body) as Map<String, dynamic>;
+    if (response.statusCode != 200) {
+      return KasError.fromJson(decode);
+    }
+    return decode;
+  }
 }
